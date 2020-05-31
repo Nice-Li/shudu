@@ -1,0 +1,104 @@
+*{
+  margin:0;
+  padding:0;
+
+}
+root, body{
+  width:100%;
+  height:100%;
+  background-color: #eee;
+}
+body{
+  transition: all .3s ease;
+}
+body.congratulation{
+  background-color: rgba(58, 184, 142, 0.808);
+
+}
+body.wrong{
+  background-color: rgba(184, 58, 58, 0.808);
+}
+.congratulation > #box > .end,
+.wrong > #box > .wrongend{
+  display: block;
+  font-size: 30px;
+  color:#fff;
+}
+.wrong > #box > .end,
+.congratulation > #box > .wrongend{
+  display: none;
+}
+#box > .end,
+#box > .wrongend{
+  display: none;
+}
+#box{
+  position:absolute; 
+  top:10%;
+  left:50%;
+  transform: translate(-50%, -10%);
+  text-align: center;
+
+}
+#box > table > tbody > tr#nonetr{
+  display: none;
+}
+#box > table > tbody > tr > td > input {
+  width:40px;
+  height:40px;
+  font-size:30px;
+  text-align: center;
+  border:none;
+  outline: none;
+}
+#box > table > tbody > tr:nth-of-type(1) > td:nth-of-type(3),
+#box > table > tbody > tr:nth-of-type(2) > td:nth-of-type(3),
+#box > table > tbody > tr:nth-of-type(4) > td:nth-of-type(3),
+#box > table > tbody > tr:nth-of-type(5) > td:nth-of-type(3),
+#box > table > tbody > tr:nth-of-type(7) > td:nth-of-type(3),
+#box > table > tbody > tr:nth-of-type(8) > td:nth-of-type(3),
+#box > table > tbody > tr:nth-of-type(9) > td:nth-of-type(3),
+#box > table > tbody > tr:nth-of-type(3) > td:nth-of-type(3),
+#box > table > tbody > tr:nth-of-type(6) > td:nth-of-type(3){
+  border-right:#000 1px solid;
+}
+#box > table > tbody > tr:nth-of-type(3) > td{
+  border-bottom:#000 1px solid;
+}
+#box > table > tbody > tr:nth-of-type(7) > td{
+  border-top:1px solid #000;
+}
+
+#box > table > tbody > tr:nth-of-type(1) > td:nth-of-type(7),
+#box > table > tbody > tr:nth-of-type(2) > td:nth-of-type(7),
+#box > table > tbody > tr:nth-of-type(3) > td:nth-of-type(7),
+#box > table > tbody > tr:nth-of-type(4) > td:nth-of-type(7),
+#box > table > tbody > tr:nth-of-type(5) > td:nth-of-type(7),
+#box > table > tbody > tr:nth-of-type(6) > td:nth-of-type(7),
+#box > table > tbody > tr:nth-of-type(7) > td:nth-of-type(7),
+#box > table > tbody > tr:nth-of-type(8) > td:nth-of-type(7),
+#box > table > tbody > tr:nth-of-type(9) > td:nth-of-type(7){
+  border-left:#000 1px solid;
+}
+
+.butgroup, 
+.levelbtn{
+  margin-bottom:15px;
+  display:flex;
+}
+.butgroup{
+  margin-top:15px;
+}
+.levelbtn > button,
+.butgroup > button{
+  flex:1;
+  height:30px;
+  color:rgb(65, 157, 194);
+  border-color:rgba(65, 157, 194, 0.233);
+  outline-color: rgb(65, 157, 194);
+  cursor:pointer;
+}
+.levelbtn > button:hover,
+.butgroup > button:hover{
+  background-color: rgba(65, 157, 194, 0.233);
+}
