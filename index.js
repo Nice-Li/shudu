@@ -100,7 +100,7 @@
         deleteArr.push(...arr1.slice(6, 9), ...arr2.slice(6, 9))
       }
 
-      let und = this.randomRang(this.getNotInNumber(deleteArr.concat(init), arr))[0]
+      let und = this.getRandomItem(this.getNotInNumber(deleteArr.concat(init), arr), 1)[0]
       if(!und){
         this.chance ++;
         if(this.chance >= 100){
@@ -137,7 +137,8 @@
       judgeArr.push(j)      
     }
 
-    let res = this.randomRang(judgeArr).slice(0, level)
+    let res = this.getRandomItem(judgeArr, level)
+
     res.forEach(ele=>{
       let dom = input[ele]
       dom.value = (this.place.flat())[ele];
@@ -213,6 +214,15 @@
   Gong.prototype.randomRang = function(arr){
     return arr.sort(()=> Math.random() * 10 - 5).concat([])
     
+  }
+
+  Gong.prototype.getRandomItem = function(arr = [], num = 0){
+    let newArr = []
+    for(let j =0; j < num; j ++){
+      let randomNum = Math.floor(Math.random() * arr.length)
+      newArr.push(arr.splice(randomNum,1))
+    }
+    return newArr.flat()
   }
 
   new Gong()
