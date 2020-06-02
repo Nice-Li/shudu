@@ -8,7 +8,10 @@
   Gong.prototype._init = function(){
     this.place = []
     this.chance = 0;
+    this.createNumber = 0;
     this.arr = [1,2,3,4,5,6,7,8,9]
+    this.checkFlag = true;
+    this.tipsFlag = true;
     this.createPlace()
     this.eventFn()
   }
@@ -19,27 +22,47 @@
     let midbtn = document.getElementsByClassName('middle')[0];
     let highbtn = document.getElementsByClassName('hight')[0];
     let checkbtn = document.getElementsByClassName('check')[0];
+    let refreshbtn = document.getElementsByClassName('refresh')[0];
+    let tipsbtn = document.getElementsByClassName('tips')[0];
+    let selfbtn = document.getElementById('selfbtn')
     showbtn.addEventListener('click', ()=>{
-      this.writeNum(81)
+      this.checkFlag = false;
+      this.changeLevel(81)
     },false)
     easybtn.addEventListener('click', ()=>{
-      this.createNum('easy')
+      this.changeLevel(36)
     }, false)
     midbtn.addEventListener('click', ()=>{
-      this.createNum('middle')
+      this.changeLevel(27)
     }, false)
     highbtn.addEventListener('click', ()=>{
-      this.createNum('hight')
+      this.changeLevel(18)
     }, false)
+    refreshbtn.addEventListener('click',()=>{
+      this.getCreateNum(this.level)
+    })
+    tipsbtn.addEventListener('click', ()=>{
+      document.body.classList.remove('wrong')
+      // if(this.checkFlag){
+        this.tipsInitFn()
+      // }
+    })
     checkbtn.addEventListener('click', ()=>{
-      this.getCheckNum()
+      // if(this.checkFlag){
+        this.getCheckResolute()
+      // }
     }, false)
+    let self = this;
+    selfbtn.addEventListener('input', debounce(function(){
+      self.changeLevel(Object.is(+this.value, NaN) ? 81 : +this.value)
+    }, 500), false)
   }
 
   Gong.prototype.createPlace = function(){
     let n  = 9
     let str = ''
     let tbody = document.getElementsByClassName('tbody')[0];
+    this.tbody = tbody;
     for(let i = 0; i < 9; i ++){
       str += `<td>
                 <input type="text" maxlength="1">
@@ -51,106 +74,116 @@
     while(n --){
       tbody.innerHTML += trDom;
     }
-    this.createNum(this.level)
+    this.input = tbody.getElementsByTagName('input');
+    this.getCreateNum(this.level)
   }
-
-  Gong.prototype.createNum = function(level){
-
-    this.level = level
+  Gong.prototype.getCreateNum = function(level){
+    let input = this.input
+    for(let j = 0; j < 81; j ++){
+      input[j].value = '';
+      input[j].removeAttribute('disabled')    
+    }
+    this.createNum()
+    this.changeLevel(level)
+  }
+  Gong.prototype.createNum = function(){
+    document.body.classList.remove('noreal')
+    this.createNumber ++
     this.place = []
-    this.flag = true;
+    this.createFlag = true;
+    this.checkFlag = true;
     let arr = this.arr;
-    let a = this.createNumFn(arr, [], [])
-    let b = this.createNumFn(arr, a, [])
-    let c = this.createNumFn(arr, a, b)
-    let d = this.createNumFn(arr, [], [], a, b, c)
-    let e = this.createNumFn(arr, d, [], a, b, c)
-    let f = this.createNumFn(arr, d, e, a, b, c)
-    let g = this.createNumFn(arr, [], [], a, b, c, d, e, f)
-    let h = this.createNumFn(arr, g, [], a, b, c, d, e, f)
-    let i = this.createNumFn(arr, g, h, a, b, c, d, e, f)
-    if(this.flag){
+
+    let res = this.getCheckNum();
+    let checkRow = res.checkRow;
+    let checkCol = res.checkCol;
+    let checkItem = res.checkItem;
+    console.log(this.createNumber)
+    let a = this.createFlag && this.createNumFn(arr, checkRow[0], checkCol, checkItem[0],checkItem[3], checkItem[6])
+    let b = this.createFlag && this.createNumFn(arr, checkRow[1], checkCol, checkItem[0],checkItem[3], checkItem[6])
+    let c = this.createFlag && this.createNumFn(arr, checkRow[2], checkCol, checkItem[0],checkItem[3], checkItem[6])
+    let d = this.createFlag && this.createNumFn(arr, checkRow[3], checkCol, checkItem[1],checkItem[4], checkItem[7])
+    let e = this.createFlag && this.createNumFn(arr, checkRow[4], checkCol, checkItem[1],checkItem[4], checkItem[7])
+    let f = this.createFlag && this.createNumFn(arr, checkRow[5], checkCol, checkItem[1],checkItem[4], checkItem[7])
+    let g = this.createFlag && this.createNumFn(arr, checkRow[6], checkCol, checkItem[2],checkItem[5], checkItem[8])
+    let h = this.createFlag && this.createNumFn(arr, checkRow[7], checkCol, checkItem[2],checkItem[5], checkItem[8])
+    let i = this.createFlag && this.createNumFn(arr, checkRow[8], checkCol, checkItem[2],checkItem[5], checkItem[8])
+    if(this.createFlag){
+      this.createNumber = 0
       this.place.push(a, b, c, d, e, f, g, h, i) 
-      this.changeLevel(this.level)
+      this.oldPlace = this.place.concat([])
     }else{
+      if(this.createNumber >= 1000){
+        console.log('不能再生')
+        this.createNumber = 0;
+        document.body.classList.add('noreal')
+        return 
+      }
       this.createNum(this.level)
     }
 
   }
 
-  Gong.prototype.createNumFn = function(arr, arr1, arr2, ...args){
-    let init = [];
-
-    for(let j = 0; j < 9; j ++){
-      let deleteArr = null;
-      if(args.length === 0){
-        deleteArr = []
-      }else{
-        deleteArr = args.reduce((prev, next)=>{
-          prev.push(next[j])
-          return prev
-        }, [])
-      }
-
-      if(j < 3){
-        deleteArr.push(...arr1.slice(0,3), ...arr2.slice(0, 3))
-      }else if(j >= 3 && j < 6){
-        deleteArr.push(...arr1.slice(3, 6), ...arr2.slice(3, 6))
-      }else{
-        deleteArr.push(...arr1.slice(6, 9), ...arr2.slice(6, 9))
-      }
-
-      let und = this.getRandomItem(this.getNotInNumber(deleteArr.concat(init), arr), 1)[0]
-      if(!und){
-        this.chance ++;
-        if(this.chance >= 100){
-          this.chance = 0
-          this.flag = false;
-          break;
+  Gong.prototype.createNumFn = function(arr, row, col, ...args ){
+    if(this.createFlag){
+      let res = row;  
+      for(let j = 0; j < 9; j ++){
+        if(res[j]){
+          continue;
         }
-        return this.createNumFn(arr, arr1, arr2, ...args)        
+        let deleteArr = col[j].concat([]);
+        deleteArr.push(...args[Math.floor(j / 3)])
+        let fin = this.getRandomItem(this.getNotInNumber(deleteArr.concat(res), arr),1)[0]
+        if(!fin){
+          this.chance ++;
+          if(this.chance >= 100){
+            this.chance = 0
+            this.createFlag = false;
+            this.tipsFlag = false;
+            break;
+          }
+          return this.createNumFn(arr, row, col, ...args)        
+        }
+        args[Math.floor(j / 3)].push(fin);
+        col[j].push(fin)
+        res[j] = fin;    
       }
-      init.push(und)    
+      return res;
     }
-    return init;
+
   }
 
   Gong.prototype.changeLevel = function(level){
-    if(level === 'easy'){
-      this.writeNum(36)
-    }else if(level === 'middle'){
-      this.writeNum(27)
-    }else if (level === 'hight'){
-      this.writeNum(18)
-    }else{
-      this.writeNum(81)
-    }
-  }
-
-  Gong.prototype.writeNum = function(level){
-    document.body.classList.remove('wrong','congratulation')
-    let input = document.getElementsByTagName('input');
-    let judgeArr = []
+    this.level = level
+    let input = this.input;
+    this.judgeArr =[]
+    let judgeArr = this.judgeArr
     for(let j = 0; j < 81; j ++){
       input[j].value = '';
       input[j].removeAttribute('disabled')
       judgeArr.push(j)      
     }
 
-    let res = this.getRandomItem(judgeArr, level)
+    this.showNum(level)
+  }
 
+  Gong.prototype.showNum = function(level = 81){
+    document.body.classList.remove('wrong','congratulation')
+    let input = this.input;
+    let judgeArr = this.judgeArr.concat([])
+    let place = this.oldPlace;
+    let res = this.getRandomItem(judgeArr, level)
     res.forEach(ele=>{
       let dom = input[ele]
-      dom.value = (this.place.flat())[ele];
+      dom.value = (place.flat())[ele];
       dom.setAttribute('disabled', true);
-      dom.style.color = '#555';
     })
 
   }
 
   Gong.prototype.getCheckNum = function(){
-    let input = document.getElementsByTagName('input');
-    let checkRow = [],checkCol = [], checkitem = [];
+    let input = this.input;
+    let checkRow = [],checkCol = [], checkItem = [];
     for(let i = 0; i < 9; i ++){
       let row = []
       for(let j = 0 ; j < 9; j ++){
@@ -175,19 +208,14 @@
         for(let j = 0 ; j < 3; j ++){
           item.push(flatCheck[i + 9 * (j + k)], flatCheck[i + 1 + 9 * (j + k)], flatCheck[i + 2 + 9 * (j + k)])
         }
-        checkitem.push(item)
+        checkItem.push(item)
       }
     }
   
-    let rowResult = this.checkNum(checkRow)
-    let colResult = this.checkNum(checkCol)
-    let itemResult = this.checkNum(checkitem)
-    if(rowResult && colResult && itemResult ){
-      document.body.classList.remove('wrong')
-      document.body.classList.add('congratulation')
-    }else{
-      document.body.classList.remove('congratulation')
-      document.body.classList.add('wrong')
+    return {
+      checkRow,
+      checkCol,
+      checkItem
     }
   }
 
@@ -200,6 +228,60 @@
       })
     })
    }
+   Gong.prototype.getCheckResolute = function(){
+    
+    let res = this.getCheckNum()
+    let rowResult = this.checkNum(res.checkRow)
+    let colResult = this.checkNum(res.checkCol)
+    let itemResult = this.checkNum(res.checkItem)
+    if(rowResult && colResult && itemResult ){
+      document.body.classList.remove('wrong')
+      document.body.classList.add('congratulation')
+    }else{
+      document.body.classList.remove('congratulation')
+      document.body.classList.add('wrong')
+    }
+   }
+
+   Gong.prototype.tipsInitFn = function(){
+    let comFlag = this.comparePlace();
+    if(comFlag){
+      this.setTipsNum()
+    }else{
+      console.log('再创造')
+      this.createNum()
+
+    }
+
+   }
+
+   Gong.prototype.setTipsNum = function(){
+    let input = this.input;
+    let judgeArr = []
+    let place = this.oldPlace;
+    place.flat().forEach((ele, index)=>{
+      if(!(+input[index].value)){
+        judgeArr.push(index)
+      }
+    })
+    let res = this.getRandomItem(judgeArr, 1)[0]
+    let dom = input[res]
+    dom.value = (place.flat())[res];
+    dom.setAttribute('disabled', true);
+    dom.style.color = 'rgb(116, 14, 199)'
+   }
+
+   Gong.prototype.comparePlace = function(){
+    let place = this.oldPlace.flat();
+    let input = this.input;
+    return place.every((ele, index)=>{
+      if(+input[index].value && ele !== +input[index].value){
+        return false
+      }
+      return true;
+    })
+   }
+
   // 两个工具
   // 判断b数组中，a数组不包含的值
   Gong.prototype.getNotInNumber = function(a,b){
@@ -211,10 +293,6 @@
     })
   }
   
-  Gong.prototype.randomRang = function(arr){
-    return arr.sort(()=> Math.random() * 10 - 5).concat([])
-    
-  }
 
   Gong.prototype.getRandomItem = function(arr = [], num = 0){
     let newArr = []
@@ -224,6 +302,18 @@
     }
     return newArr.flat()
   }
+  
+  function debounce(fn, delay){
+    let timer = null;
+    return function(...args){
+      clearTimeout(timer)
+      timer = setTimeout(()=>{
+        fn.apply(this, args)
+      }, delay)
+    }
+  }
 
   new Gong()
 }())
+
+
