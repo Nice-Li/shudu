@@ -1,7 +1,6 @@
 *{
   margin:0;
   padding:0;
-
 }
 root, body{
   width:100%;
@@ -13,27 +12,30 @@ body{
 }
 body.congratulation{
   background-color: rgba(58, 184, 142, 0.808);
-
 }
 body.wrong{
   background-color: rgba(17, 17, 17, 0.295);
 }
-body.noreal > #box > .real,
+body.result > #box > .real,
 .congratulation > #box > .end,
 .wrong > #box > .wrongend{
   display: block;
   font-size: 30px;
   color:rgb(0, 0, 0);
 }
-body.noreal > .bg{
+body.search > .bg{
   background-color: #333;
   width:100%;
   height:100%;
+  text-align: center;
+  line-height:100vh;
   position: absolute;
   opacity: .5;
   display: block;
 }
 body > .bg{
+  color:#fff;
+  font-size:50px;
   display: none;
 }
 

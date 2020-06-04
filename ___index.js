@@ -1,3 +1,4 @@
+// 修改自动生成数独方式版本
 (function(){
 
   function Gong(level){
@@ -95,12 +96,8 @@
       input[j].value = '';
       input[j].removeAttribute('disabled')    
     }
-    this.runCreateNum()
-    this.changeLevel(level)
-  }
-  Gong.prototype.runCreateNum = function(){
-    document.body.classList.add('search')
     this.createNum()
+    this.changeLevel(level)
   }
   Gong.prototype.createNum = function(){
 
@@ -133,16 +130,14 @@
       }else{
         this.place = this.oldPlace.concat([])
       }
-      document.body.classList.remove('search')
       
     }else{
       if(this.createNumber >= 3000){
         this.createNumber = 0;
-        document.body.classList.remove( 'search')
-        document.body.classList.add('result')
+        document.body.classList.add('noreal')
         setTimeout(()=>{
-          document.body.classList.remove('result', 'search')
-        },1000)
+          document.body.classList.remove('noreal')
+        },2000)
         return 
       }
       this.createNum()
@@ -197,7 +192,7 @@
   }
 
   Gong.prototype.showNum = function(level = 81){
-    document.body.classList.remove('wrong','congratulation','search')
+    document.body.classList.remove('wrong','congratulation')
     let input = this.input;
     let judgeArr = this.judgeArr.concat([])
     let place = this.oldPlace;
@@ -291,7 +286,7 @@
     if(comFlag){
       this.setTipsNum()
     }else{
-      this.runCreateNum()
+      this.createNum()
     }
 
    }
