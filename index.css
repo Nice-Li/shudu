@@ -16,14 +16,29 @@ body.congratulation{
 
 }
 body.wrong{
-  background-color: rgba(184, 58, 58, 0.808);
+  background-color: rgba(17, 17, 17, 0.295);
 }
+body.noreal > #box > .real,
 .congratulation > #box > .end,
 .wrong > #box > .wrongend{
   display: block;
   font-size: 30px;
-  color:#fff;
+  color:rgb(0, 0, 0);
 }
+body.noreal > .bg{
+  background-color: #333;
+  width:100%;
+  height:100%;
+  position: absolute;
+  opacity: .5;
+  display: block;
+}
+body > .bg{
+  display: none;
+}
+
+
+#box > .real,
 .wrong > #box > .end,
 .congratulation > #box > .wrongend{
   display: none;
@@ -32,6 +47,9 @@ body.wrong{
 #box > .wrongend{
   display: none;
 }
+#box > .colorbox > #selfcolor{
+  width:100px;
+}
 #box{
   position:absolute; 
   top:10%;
@@ -39,6 +57,10 @@ body.wrong{
   transform: translate(-50%, -10%);
   text-align: center;
 
+}
+#box > h1{
+  color:rgba(0, 0, 0, 0.815);
+  margin-bottom:10px;
 }
 #box > table > tbody > tr#nonetr{
   display: none;
@@ -50,6 +72,11 @@ body.wrong{
   text-align: center;
   border:none;
   outline: none;
+  color:#000;
+}
+
+#box > table > tbody > tr > td > input:disabled{
+  color:rgb(116, 14, 199);
 }
 #box > table > tbody > tr:nth-of-type(1) > td:nth-of-type(3),
 #box > table > tbody > tr:nth-of-type(2) > td:nth-of-type(3),
@@ -80,7 +107,11 @@ body.wrong{
 #box > table > tbody > tr:nth-of-type(9) > td:nth-of-type(7){
   border-left:#000 1px solid;
 }
+.levelbtn > #selfbtn{
+  width:25%;
+  text-align: center;
 
+}
 .butgroup, 
 .levelbtn{
   margin-bottom:15px;
@@ -88,17 +119,26 @@ body.wrong{
 }
 .butgroup{
   margin-top:15px;
+  flex-wrap: wrap;
+}
+.butgroup > button{
+  width:50%;
+}
+.levelbtn > button{
+  flex:1;
 }
 .levelbtn > button,
 .butgroup > button{
   flex:1;
   height:30px;
-  color:rgb(65, 157, 194);
-  border-color:rgba(65, 157, 194, 0.233);
-  outline-color: rgb(65, 157, 194);
+  color:rgb(116, 14, 199);
+  /* border-color:rgba(116, 14, 199, 0.8); */
+  /* outline-color: rgb(116, 14, 199); */
+  border:none;
+  outline: none;
   cursor:pointer;
 }
 .levelbtn > button:hover,
 .butgroup > button:hover{
-  background-color: rgba(65, 157, 194, 0.233);
+  background-color: rgba(116, 14, 199, 0.1);
 }

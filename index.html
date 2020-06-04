@@ -9,11 +9,12 @@
 <body>
 
   <div id="box">
-
+    <h1>数 独</h1>
     <div class="levelbtn">
       <button class="easy">简单</button>
       <button class="middle">中等</button>
       <button class="hight">困难</button>
+      <input type="text" placeholder="自定义数目" id="selfbtn" maxlength="2">
     </div>
     <table class="table" >
       <tbody class="tbody">
@@ -21,13 +22,17 @@
       </tbody>
     </table>
     <div class="butgroup">
-      <button class="show">查看</button>
-      <button class="check">检查</button>
+      <button class="refresh">再来一局</button>
+      <button class="tips">提示一次</button>
+      <button class="show">查看答案</button>
+      <button class="check">检查错误</button>
     </div>
+    <div class="colorbox">请选择数字颜色：<input type="color" id="selfcolor"></div>
     <div class="end">您真是太厉害了！</div>
     <div class="wrongend">存在错误哟！请仔细检查！</div>
+    <div class="real">没有查询到对应的数独，再尝试一次呗！</div>
   </div>
-
+  <div class="bg"></div>
   <script src="./index.js"></script>
 
 </body>
