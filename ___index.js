@@ -1,3 +1,4 @@
+// 修改自动生成数独方式版本
 (function(){
 
   function Gong(level){
@@ -26,9 +27,10 @@
     let refreshbtn = document.getElementsByClassName('refresh')[0];
     let tipsbtn = document.getElementsByClassName('tips')[0];
     let selfbtn = document.getElementById('selfbtn')
-    let quescolorbtn = document.getElementsByClassName('quescolor')[0]
-    let origincolorbtn = document.getElementsByClassName('origincolor')[0]
+    let selfcolorbtn = document.getElementById('selfcolor')
+
     showbtn.addEventListener('click', ()=>{
+
       this.changeLevel(81)
       this.checkFlag = false;
     },false)
@@ -52,18 +54,16 @@
     })
     checkbtn.addEventListener('click', ()=>{
       if(this.checkFlag){
-        this.checkNum(this.input, this.getCheckResolute)
+        this.getCheckResolute()
       }
     }, false)
     let self = this;
     selfbtn.addEventListener('input', debounce(function(){
       self.changeLevel(Object.is(+this.value, NaN) ? 81 : +this.value)
     }, 500), false)
-    origincolorbtn.addEventListener('click', ()=>{
-      this.color = 'rgb(116, 14, 199)'
-    },false)
-    quescolorbtn.addEventListener('click', ()=>{
-      this.color = 'rgb(24, 11, 34)'
+
+    selfcolorbtn.addEventListener('change',function(){
+      self.color = this.value
     },false)
     this.tbody.addEventListener('input',function(e){
       e.target.style.color = self.color;
@@ -99,7 +99,6 @@
     this.createNum()
     this.changeLevel(level)
   }
-
   Gong.prototype.createNum = function(){
 
     this.createNumber ++
@@ -121,11 +120,11 @@
       let res = this.createNumFn(arr, checkRow[i], checkCol, checkItem[j],checkItem[j + 3], checkItem[j + 6])
       this.place.push(res)
     }
+    // let a = this.createFlag && this.createNumFn(arr, checkRow[0], checkCol, checkItem[0],checkItem[3], checkItem[6])
 
     if(this.createFlag){
-      document.body.classList.remove('loading')
       this.createNumber = 0
-      let resflag = this.checkNum(this.place.flat(), this.checkPlaceNum)
+      let resflag = this.checkPlaceNum(this.place.flat())
       if(resflag){
         this.oldPlace = this.place.concat([])
       }else{
@@ -137,7 +136,7 @@
         this.createNumber = 0;
         document.body.classList.add('noreal')
         setTimeout(()=>{
-          document.body.classList.remove('loading','noreal')
+          document.body.classList.remove('noreal')
         },2000)
         return 
       }
@@ -178,17 +177,24 @@
   }
 
   Gong.prototype.changeLevel = function(level){
-    document.body.classList.remove('wrong','congratulation','loading')
     this.level = level
     this.checkFlag = true;
     let input = this.input;
-    let judgeArr = []
+    this.judgeArr =[]
+    let judgeArr = this.judgeArr
     for(let j = 0; j < 81; j ++){
       input[j].value = '';
       input[j].removeAttribute('disabled')
       judgeArr.push(j)      
     }
 
+    this.showNum(level)
+  }
+
+  Gong.prototype.showNum = function(level = 81){
+    document.body.classList.remove('wrong','congratulation')
+    let input = this.input;
+    let judgeArr = this.judgeArr.concat([])
     let place = this.oldPlace;
     let res = this.getRandomItem(judgeArr, level)
     res.forEach(ele=>{
@@ -197,6 +203,7 @@
       dom.setAttribute('disabled', true);
       dom.style.color = 'rgb(116, 14, 199)'    
     })
+
   }
 
   Gong.prototype.getCheckNum = function(check){
@@ -246,15 +253,12 @@
       })
     })
    }
-   Gong.prototype.checkNum = function(check, cb){
+   Gong.prototype.checkPlaceNum = function(check){
     let res = this.getCheckNum(check)
     let rowResult = this.checkLastNum(res.checkRow)
     let colResult = this.checkLastNum(res.checkCol)
     let itemResult = this.checkLastNum(res.checkItem)
-    return cb(rowResult && colResult && itemResult)
-   }
-   Gong.prototype.checkPlaceNum = function(flag){
-    if(flag){
+    if(rowResult && colResult && itemResult ){
       document.body.classList.remove('wrong')
       return true;
     }else{
@@ -262,16 +266,19 @@
       return false;
     }
    }
-   Gong.prototype.getCheckResolute = function(flag){   
-      if(flag){
-        document.body.classList.remove('wrong')
-        document.body.classList.add('congratulation')
-        return true;
-      }else{
-        document.body.classList.remove('congratulation')
-        document.body.classList.add('wrong')
-        return false;
-      }
+   Gong.prototype.getCheckResolute = function(){
+    
+    let res = this.getCheckNum(this.input)
+    let rowResult = this.checkLastNum(res.checkRow)
+    let colResult = this.checkLastNum(res.checkCol)
+    let itemResult = this.checkLastNum(res.checkItem)
+    if(rowResult && colResult && itemResult ){
+      document.body.classList.remove('wrong')
+      document.body.classList.add('congratulation')
+    }else{
+      document.body.classList.remove('congratulation')
+      document.body.classList.add('wrong')
+    }
    }
 
    Gong.prototype.tipsInitFn = function(){
@@ -279,9 +286,9 @@
     if(comFlag){
       this.setTipsNum()
     }else{
-      document.body.classList.add('loading')
       this.createNum()
     }
+
    }
 
    Gong.prototype.setTipsNum = function(){
@@ -300,6 +307,7 @@
       dom.setAttribute('disabled', true);
       dom.style.color = 'rgb(116, 14, 199)'
     }
+
    }
 
    Gong.prototype.comparePlace = function(){
@@ -313,7 +321,7 @@
     })
    }
 
-
+  // 两个工具
   // 判断b数组中，a数组不包含的值
   Gong.prototype.getNotInNumber = function(a,b){
     return b.filter(ele=>{
@@ -344,7 +352,7 @@
     }
   }
 
-  new Gong(36)
+  new Gong()
 }())
 
 

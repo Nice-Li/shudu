@@ -6,7 +6,7 @@
   <title>数独</title>
   <link rel="stylesheet" href="index.css">
 </head>
-<body>
+<body class="loading">
 
   <div id="box">
     <h1>数 独</h1>
@@ -27,12 +27,15 @@
       <button class="show">查看答案</button>
       <button class="check">检查错误</button>
     </div>
-    <div class="colorbox">请选择数字颜色：<input type="color" id="selfcolor"></div>
+    <div class="colorbox">
+      <button class="origincolor">原色</button>
+      <button class="quescolor">疑问色</button>
+    </div>
     <div class="end">您真是太厉害了！</div>
     <div class="wrongend">存在错误哟！请仔细检查！</div>
     <div class="real">没有查询到对应的数独，再尝试一次呗！</div>
   </div>
-  <div class="bg"></div>
+  <div class="bg">Loading...</div>
   <script src="./index.js"></script>
 
 </body>
