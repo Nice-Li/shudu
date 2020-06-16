@@ -41,7 +41,29 @@ body > .bg{
   display: none;
 }
 
+/* 数字选择区 */
+#box > .numbox{
+  list-style: none;
+  display: flex;
+  margin-bottom:15px;
+}
+#box > .numbox > li{
+  flex:1;
+  border:1px solid rgb(116, 14, 199);
+  border-right:none;
+  height:35px;
+  line-height: 35px;
+  font-size:30px;
+  color:rgb(116, 14, 199);
+}
+#box > .numbox > li:last-of-type{
+  border-right:1px solid rgb(116, 14, 199);
+}
+#box > .numbox > li.active{
+  background-color: rgba(116, 14, 199, 0.4);
+}
 
+/* 错误或者成功 */
 #box > .real,
 .wrong > #box > .end,
 .congratulation > #box > .wrongend{
@@ -69,6 +91,8 @@ body > .bg{
   color:rgb(39, 4, 53);
   margin-bottom:10px;
 }
+
+/* 九宫格 */
 #box > table > tbody > tr#nonetr{
   display: none;
 }
@@ -114,11 +138,16 @@ body > .bg{
 #box > table > tbody > tr:nth-of-type(9) > td:nth-of-type(7){
   border-left:#000 1px solid;
 }
+
+/* 按键btn */
 .levelbtn > #selfbtn{
   width:25%;
   text-align: center;
   border:none;
   outline: none;
+}
+.levelbtn{
+  margin-top:15px;
 }
 .butgroup, 
 .levelbtn{
@@ -156,4 +185,5 @@ body > .bg{
 #box > .colorbox{
   display: flex;
 }
+
 

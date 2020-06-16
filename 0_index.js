@@ -11,11 +11,10 @@
     this.chance = 0;
     this.createNumber = 0;
     this.arr = [1,2,3,4,5,6,7,8,9]
-    this.numValue = 1
     this.checkFlag = true;
     this.tipsFlag = true;
     this.createPlace()
-    
+
   }
   
   Gong.prototype.eventFn = function(){
@@ -29,20 +28,6 @@
     let selfbtn = document.getElementById('selfbtn')
     let quescolorbtn = document.getElementsByClassName('quescolor')[0]
     let origincolorbtn = document.getElementsByClassName('origincolor')[0]
-    let ulbtn = document.getElementsByClassName('numbox')[0]
-    let libtn = ulbtn.getElementsByTagName('li')
-    ulbtn.addEventListener('click', (e)=>{
-      let len = libtn.length;
-      for(let i = 0; i < len; i ++){
-        libtn[i].classList.remove('active')
-      }
-      if(e.target.nodeName.toUpperCase() === 'LI'){
-        e.target.classList.add('active')
-        this.numValue = +e.target.textContent;
-      }
-      
-    })
-
     showbtn.addEventListener('click', ()=>{
       this.changeLevel(81)
       this.checkFlag = false;
@@ -80,15 +65,9 @@
     quescolorbtn.addEventListener('click', ()=>{
       this.color = 'rgb(24, 11, 34)'
     },false)
-    this.tbody.addEventListener('click',function(e){
-      if(!e.target.getAttribute('disabled')){
-        document.activeElement.blur();
-        e.target.value = self.numValue;
-        e.target.style.color = self.color;
-      }
-
+    this.tbody.addEventListener('input',function(e){
+      e.target.style.color = self.color;
     }, false)
-
   }
 
   Gong.prototype.createPlace = function(){
@@ -201,7 +180,6 @@
   Gong.prototype.changeLevel = function(level){
     document.body.classList.remove('wrong','congratulation','loading')
     this.level = level
-    this.color = 'rgb(116, 14, 199)'
     this.checkFlag = true;
     let input = this.input;
     let judgeArr = []
