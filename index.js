@@ -11,7 +11,7 @@
     this.chance = 0;
     this.createNumber = 0;
     this.arr = [1,2,3,4,5,6,7,8,9]
-    this.numValue = 1
+    this.numValue = ''
     this.checkFlag = true;
     this.tipsFlag = true;
     this.createPlace()
@@ -38,7 +38,7 @@
       }
       if(e.target.nodeName.toUpperCase() === 'LI'){
         e.target.classList.add('active')
-        this.numValue = +e.target.textContent;
+        this.numValue = +e.target.textContent ? +e.target.textContent : '';
       }
       
     })
